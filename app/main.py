@@ -14,3 +14,9 @@ def bedroom(id: int):
 @app.get("/bedroom")
 def master_bedroom():
     return {"message": "This is the Master Bedroom"}
+
+@app.get("/personal_info_{name}_{age}_{birth_place}")
+def info(name, age, birth_place):
+    return {"name":{name}, 
+    "age": {age}, 
+    "Birth_place": birth_place}

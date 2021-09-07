@@ -1,43 +1,24 @@
-version: "3"
-services:
-  postgres:
-    container_name: postgres_container
-    image: postgres:11.5
-    ports:
-    - "5432:5432"
-    volumes:
-    - postgresdata:/data/postgres
-    - postgresdbdata:/var/lib/postgresql/data
-    env_file:
-    - docker.env
-    networks:
-    - postgres
+version: "3.3"
 
-  pgadmin:
-    links:
-    - postgres:postgres
-    container_name: pgadmin_container
-    image: dpage/pgadmin4
-    ports:
-    - "9090:8080"
+services: 
+  db:
+    image: postgres:12
+    restart: always
     volumes:
-    - pgadmindata:/root/.pgadmin
-    - pgadminlibdata:/var/lib/pgadmin
+      - db-data:/var/lib/postgresql/data/pgdata
     env_file:
-    - docker.env
-    networks:
-    - postgres
+      - .env
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+
+  pgadminN:
+    image: dpage/pgadmin4
+    depends_on:
+      - db
+    env_file:
+      - .env
 
 volumes:
-  postgresdata:
-    driver: local
-  postgresdbdata:
-    driver: local
-  pgadmindata:
-    driver: local
-  pgadminlibdata:
-    driver: local
-
-networks:
-  postgres:
-    driver: bridge
+  db-data:
